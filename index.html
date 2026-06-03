@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Stage</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px 30px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .emoji {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 30px;
+        }
+
+        .circle-container {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 30px;
+        }
+
+        svg {
+            transform: rotate(-90deg);
+            width: 180px;
+            height: 180px;
+        }
+
+        .bg-circle {
+            fill: none;
+            stroke: #f0f0f0;
+            stroke-width: 12;
+        }
+
+        .progress-circle {
+            fill: none;
+            stroke: url(#gradient);
+            stroke-width: 12;
+            stroke-linecap: round;
+            stroke-dasharray: 502;
+            stroke-dashoffset: 502;
+            transition: stroke-dashoffset 1.5s ease;
+        }
+
+        .circle-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .percent-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #667eea;
+            line-height: 1;
+        }
+
+        .percent-sign {
+            font-size: 1rem;
+            color: #888;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-box {
+            background: #f8f9ff;
+            border-radius: 16px;
+            padding: 15px 10px;
+        }
+
+        .stat-number {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 3px;
+        }
+
+        .dates {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #aaa;
+            padding-top: 20px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .date-item {
+            text-align: center;
+        }
+
+        .date-item span {
+            display: block;
+            font-weight: 600;
+            color: #555;
+            font-size: 0.85rem;
+        }
+
+        .live-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #4CAF50;
+            border-radius: 50%;
+            margin-right: 5px;
+            animation: pulse 1.5s infinite;
+        }
+
+        .live-badge {
+            font-size: 0.75rem;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        @media (max-width: 380px) {
+            .card {
+                padding: 30px 20px;
+            }
+            .percent-number {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="emoji">💼</div>
+    <h1>Mon Stage</h1>
+    <p class="subtitle">Progression en temps réel</p>
+
+    <div class="live-badge">
+        <span class="live-dot"></span>Mise à jour en direct
+    </div>
+
+    <div class="circle-container">
+        <svg viewBox="0 0 180 180">
+            <defs>
+                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#667eea"/>
+                    <stop offset="100%" style="stop-color:#764ba2"/>
+                </linearGradient>
+            </defs>
+            <circle class="bg-circle" cx="90" cy="90" r="80"/>
+            <circle class="progress-circle" id="progressCircle" cx="90" cy="90" r="80"/>
+        </svg>
+        <div class="circle-text">
+            <div class="percent-number" id="percentNumber">0</div>
+            <div class="percent-sign">% accompli</div>
+        </div>
+    </div>
+
+    <div class="stats">
+        <div class="stat-box">
+            <div class="stat-number" id="daysDown">-</div>
+            <div class="stat-label">☀️ Jours écoulés</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number" id="daysLeft">-</div>
+            <div class="stat-label">⏳ Jours restants</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number" id="weeksLeft">-</div>
+            <div class="stat-label">📅 Semaines restantes</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number" id="totalDays">-</div>
+            <div class="stat-label">📊 Durée totale</div>
+        </div>
+    </div>
+
+    <div class="dates">
+        <div class="date-item">
+            🟢 Début<span>20 Avril 2026</span>
+        </div>
+        <div class="date-item">
+            🔴 Fin<span>23 Oct. 2026</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateProgress() {
+        const start = new Date('2026-04-20T00:00:00');
+        const end = new Date('2026-10-23T23:59:59');
+        const now = new Date();
+
+        const total = end - start;
+        const elapsed = now - start;
+
+        const percent = Math.min(100, Math.max(0, (elapsed / total) * 100));
+        const totalDays = Math.round(total / (1000 * 60 * 60 * 24));
+        const daysElapsed = Math.floor(elapsed / (1000 * 60 * 60 * 24));
+        const daysLeft = Math.max(0, totalDays - daysElapsed);
+        const weeksLeft = Math.ceil(daysLeft / 7);
+
+        document.getElementById('percentNumber').textContent = percent.toFixed(1);
+        document.getElementById('daysDown').textContent = daysElapsed;
+        document.getElementById('daysLeft').textContent = daysLeft;
+        document.getElementById('weeksLeft').textContent = weeksLeft;
+        document.getElementById('totalDays').textContent = totalDays;
+
+        const circumference = 502;
+        const offset = circumference - (percent / 100) * circumference;
+        document.getElementById('progressCircle').style.strokeDashoffset = offset;
+    }
+
+    updateProgress();
+    setInterval(updateProgress, 1000);
+    setTimeout(updateProgress, 100);
+</script>
+
+</body>
+</html>
